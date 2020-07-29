@@ -1,10 +1,29 @@
 # Inter-Bank-ATM-Network-Smart-Contract
-Currently, Inter-Bank ATM process works as a Remote-On-Us model where third party network or mediator operates in between banks to transfer funds from one to another and charges fees for this which is further charged to customer only.
-Using a blockchain with all the members of the network on the blockchain as nodes can help to decomplexify the whole system. The transactions done on the ATM can be recorded on the blockchain and smart contract can work between the issuer and acquirer bank directly without involving the mediator. This will help to enhance security, transparency and immutability of the data as there will be no loss of online transactions data. The reconciliation process will also be simplified because of implementation of the blockchain. This will reduce the transaction charges and the costs of reconciliation.
 
-Suppose, there is a person XYZ who has a savings account with bank A, wants to withdraw the money from bank B's ATM. Bank A will debit the transaction value and charge from XYZ's account and will credit it to their settlement account. Bank C (mediator) will debit the Bank A's settlement account with transaction value and accumulated fee and will credit it accordingly to the Bank B's settlement account.
+## Background
 
-When a blockchain is implemented in Inter-Bank ATM network, Bank A will directly send money to Bank B without involving the Bank C(mediator).
+When a client pays a bill or sends money from one bank to another, it takes 2-5 days to process. This is because money is not sent in real-time, but transactions relative to another financial institution (FI) are summed and processed as a batch at the end of the day. A EFT smart contract solves this problem by sharing a ledger between all concerned FIs--a consortium blockchain. Any FI that is part of the consortium and enters into the smart contract sends the EFT transaction on the shared ledger in real-time and does not require a third party to clear and settle the inter-bank transactions.
+
+## Smart Contract in Solidity
+
+The smart contract may or may not be designed to use Ethereum's cryptocurrency (ETH), or to link Canadian Dollars (CAD) to ETH. We make use of only the shared ledger that records the inter-bank transactions and the ability of FIs to consent in a smart contract to a deposit or withdrawal on behalf of the customer's bank account to the other FI's customer's bank account. Here is an example use case.
+
+### 1. Request transfer
+
+Bank A executes `requestTransfer` with a chosen `correlationId`, `fromAccount` = 12345 (bank account number at Bank A), `address` = <blockchain address of Bank B>, `amount` = 1000 (CAD), and `transactionType` = `Deposit`. The function generates a `transferID` by hashing the combination of the blockchain address of Bank A, the blockchain address of Bank B, bank account 12345 at Bank A, the amount, the timestamp of the blockchain transaction, and the correlationId.
+```
+  bytes32 transferId = sha256(msg.sender, to, fromAccount, toAccount, amount, now, correlationId);
+```
+The values are populated and the transfer's `State` is set to `Initiated`. A `TransferRequested` event is recorded on the blockchain with Bank A's blockchain address, Bank B's blockchain address, the correlation ID, and the transfer ID.
+Hashing is used to simulate a universally-unique identifier (UUID).
+  
+### 2. Get details of transfer request
+
+Bank B can call getters like `getFromAccount(bytes32 transferId) returns (uint)` and `getAmount(bytes32 transferId) returns (uint)` to get details of the transfer request. The smart contract's getters allow only the sender and receiver to access these confidential details by checking that the blockchain address of the entity requesting the details corresponds to the sender or receiver's blockchain address for the transfer request.
+
+### 3. Confirm transfer
+
+Bank B executes `confirmTransfer` with the `transferId`. The function checks that the blockchain address matches the intended receiver, and changes the `Transfer`'s state to `Confirmed`. A `TransferConfirmed` event is posted on the blockchain, notifying the sender.
 
 # Contract is deployed on Rinkeby (Ethereum-Testnet) Network.
 ## Contract Address :- 0x65Ac627dD5973d087028be8a585EA3Eb0Fb8763d
