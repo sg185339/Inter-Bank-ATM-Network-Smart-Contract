@@ -6,3 +6,28 @@ Suppose, there is a person XYZ who has a savings account with bank A, wants to w
 
 When a blockchain is implemented in Inter-Bank ATM network, Bank A will directly send money to Bank B without involving the Bank C(mediator).
 
+# Contract is deployed on Rinkeby (Ethereum-Testnet) Network.
+## Contract Address :- 0x65Ac627dD5973d087028be8a585EA3Eb0Fb8763d
+## Contract URL :- https://rinkeby.etherscan.io/address/0x65Ac627dD5973d087028be8a585EA3Eb0Fb8763d
+### For now, we have focused on the settlement of the money. Authentication and Validation will be done in further phases.
+
+We have built DApp as well to interact with the contract.
+
+This involves a number of open source projects to work properly:
+
+* [Remix] - Solidity IDE that's used to write, compile and debug Solidity code.
+* [Javascript] - ightweight, interpreted, object-oriented language with first-class functions, and is best known as the scripting language for Web pages | One Word- Awesome.
+* [Solidity] - A contract-oriented programming language for writing smart contracts.
+* [Truffle] - A Development environment, testing framework, and asset pipeline all rolled into one.
+* [MetaMask] - An extension injects the Ethereum web3 API into every website's javascript context, so that dapps can read from the blockchain.
+
+#### Installation - Frontend
+Install the dependencies and devDependencies and start the server.
+
+```sh
+$ npm install 
+$ cd app/js
+$ npm run dev
+```
+#### Installation - Backend
+You do not need to do anything. Contract is already deployed on Blockchain...
