@@ -3,46 +3,275 @@
   <head>
     <title>Inter-Bank ATM Network</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <style>
     input {
       display: block;
       margin-bottom: 12px;
     }
+    body {
+    font-size: 16px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    text-align: center;
+    background-color:  #f0f0f0;
+  }
+
+  .bubbly-button {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    display: inline-block;
+    font-size: 1em;
+    padding: 1em 2em;
+    margin-top: 100px;
+    margin-bottom: 140px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #ff0081;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+    box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
+  }
+  .bubbly-button:focus {
+    outline: 0;
+  }
+  .bubbly-button:before, .bubbly-button:after {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 140%;
+    height: 100%;
+    left: -20%;
+    z-index: -1000;
+    transition: all ease-in-out 0.5s;
+    background-repeat: no-repeat;
+  }
+  .bubbly-button:before {
+    display: none;
+    top: -75%;
+    background-image: radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 20%, #ff0081 20%, transparent 30%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 10%, #ff0081 15%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%);
+    background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+  }
+  .bubbly-button:after {
+    display: none;
+    bottom: -75%;
+    background-image: radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 10%, #ff0081 15%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%);
+    background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+  }
+  .bubbly-button:active {
+    transform: scale(0.9);
+    background-color: #e60074;
+    box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
+  }
+  .bubbly-button.animate:before {
+    display: block;
+    animation: topBubbles ease-in-out 0.75s forwards;
+  }
+  .bubbly-button.animate:after {
+    display: block;
+    animation: bottomBubbles ease-in-out 0.75s forwards;
+  }
+ 
+  @keyframes topBubbles {
+    0% {
+      background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+    }
+    50% {
+      background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%;
+    }
+    100% {
+      background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%, 50% 40%, 65% 10%, 90% 20%;
+      background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+  }
+  @keyframes bottomBubbles {
+    0% {
+      background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%;
+    }
+    50% {
+      background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%;
+    }
+    100% {
+      background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%;
+      background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+  }
+  .bubbly-button-1 {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    display: inline-block;
+    font-size: 1em;
+    padding: 1em 2em;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #ff0081;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+    box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
+  }
+  .bubbly-button-1:focus {
+    outline: 0;
+  }
+  /* .bubbly-button-1.hover {
+    color:rgba(255, 0, 130, 0.5);
+    background-color: #f0f0f0;
+
+  } */
+  .bubbly-button-1:before, .bubbly-button-1:after {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 140%;
+    height: 100%;
+    left: -20%;
+    z-index: -1000;
+    transition: all ease-in-out 0.5s;
+    background-repeat: no-repeat;
+  }
+  .bubbly-button-1:before {
+    display: none;
+    top: -75%;
+    background-image: radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 20%, #ff0081 20%, transparent 30%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 10%, #ff0081 15%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%);
+    background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+  }
+  .bubbly-button-1:after {
+    display: none;
+    bottom: -75%;
+    background-image: radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, transparent 10%, #ff0081 15%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%), radial-gradient(circle, #ff0081 20%, transparent 20%);
+    background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+  }
+  .bubbly-button-1:active {
+    transform: scale(0.9);
+    background-color: #e60074;
+    box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
+  }
+  .bubbly-button-1.animate:before {
+    display: block;
+    animation: topBubbles1 ease-in-out 0.75s forwards;
+  }
+  .bubbly-button-1.animate:after {
+    display: block;
+    animation: bottomBubbles1 ease-in-out 0.75s forwards;
+  }
+ 
+  @keyframes topBubbles1 {
+    0% {
+      background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+    }
+    50% {
+      background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%;
+    }
+    100% {
+      background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%, 50% 40%, 65% 10%, 90% 20%;
+      background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+  }
+  @keyframes bottomBubbles1 {
+    0% {
+      background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%;
+    }
+    50% {
+      background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%;
+    }
+    100% {
+      background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%;
+      background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+
+  }
+  
+  hr.style13 {
+  	height: 10px;
+  	border: 0;
+  	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+  }
+  
   </style>
   <body>
-    <h1>Inter-Bank ATM Network DAPP</h1>
+    <h1 style="text-align:center">Inter-Bank ATM Network DAPP</h1>
 
-    <hr>
+    <hr class="style13">  
       <h1>Register a Bank</h1>
       <p>Requires a fund of 10ETH...</p>
       <p>Termination notice is for 90 days.</p>
-      <button id="createStar" onclick="App.createStar()">Register</button>
-      <button id="createStar" onclick="App.terminateNoticeBank()">Termination Notice</button>
-      <button id="createStar" onclick="App.withdrawBank()">Withdraw Fund</button>
-      <br><br>
-      <button id="createStar" onclick="App.getBalance()">View Balance</button> 
+      <button id="createStar" onclick="App.createStar()" class="bubbly-button">Register</button> <span id="bank"></span>
+      <hr class="style13">      
+      <label for="name"><h1>Fund Amount (in Wei):</h1></label>
+      <br>
+      <input type="text" id="fundamount" class="bubbly-button-1" ></input>
+      <br>
+      <button id="createStar" onclick="App.fundBank()" class="bubbly-button-1">Fund</button>
+      <button id="createStar" onclick="App.terminateNoticeBank()" class="bubbly-button-1">Termination Notice</button>
+      <button id="createStar" onclick="App.withdrawBank()" class="bubbly-button-1">Withdraw Fund</button>
+      <br>
+      <button id="createStar" onclick="App.getBalance()" class="bubbly-button-1">View Balance</button> 
       <span id="balance"></span>
-      
-      <br><br>
+      <hr class="style13">      
       <h1>Request Transfer</h1>
-      <label for="name">Correlation ID:</label><input type="text" id="Correlation"></input>
-      <label for="name">Customer Bank Account:</label><input type="text" id="Customer"></input>
-      <label for="name">Bank's Address:</label><input type="text" id="Address"></input>
-      <label for="name">Amount:</label><input type="text" id="Amount"></input>
-      <label for="name">Transaction Type:</label><input type="text" id="Transaction"></input>
-      <br><button onclick="App.requestTransfer()">Request Transfer</button>
-      <hr>
+      <label for="name">Correlation ID:</label>
+      <input type="text" id="Correlation" class="bubbly-button-1"></input>
+      <label for="name">Customer Bank Account:</label>
+      <input type="text" id="Customer"class="bubbly-button-1"></input>
+      <label for="name">Bank's Address:</label>
+      <input type="text" id="Address"class="bubbly-button-1"></input>
+      <br>
+      <label for="name">Amount:</label>
+      <input type="text" id="Amount"class="bubbly-button-1"></input>
+      <label for="name">Transaction Type:</label><select class="bubbly-button-1" id="RTransaction">
+        <option  value="0">Unknown</option>
+        <option  value="1">Deposit</option>
+        <option  value="2">Withdrawl</option>
+      </select>
+      <br>
+      <button onclick="App.requestTransfer()" class="bubbly-button-1">Request Transfer</button> <span id="transferid"></span>
+      <hr class="style13">    
       <h1>Confirm Transfer</h1>
-      <label for="name">Transaction ID:</label><input type="text" id="Transaction"></input>
-      <br><button onclick="App.getFrom()">View From of Transaction</button>
-     <button onclick="App.getTo()">View To of Transaction</button>
-    <button onclick="App.getFromAccount()">View Customer of Transaction</button>
-      <button onclick="App.getAmount()">View Amount of Transaction</button>
-     <button onclick="App.getState()">View State of Transaction</button>
-     <span id="view"></span>
+      <label for="name">Transaction ID:</label><input class="bubbly-button-1" type="text" id="Transaction"></input>
+      <br><button class="bubbly-button-1" onclick="App.confirmTransfer()">Confirm Transfer</button> <span id="status2"></span>
+      <br><br>
+      <span id="view"></span>
       <span id="status"></span>
+      <br>
+      <button class="bubbly-button-1" onclick="App.getFrom()">View From of Transaction</button>
+     <button class="bubbly-button-1" onclick="App.getTo()">View To of Transaction</button>
+    <button class="bubbly-button-1" onclick="App.getFromAccount()">View Customer of Transaction</button>
+      <button class="bubbly-button-1" onclick="App.getAmount()">View Amount of Transaction</button>
+     <button class="bubbly-button-1" onclick="App.getState()">View State of Transaction</button>
+     <br>
+     
       <br>
     <script src="index.js"></script>
   </body>
 </html>
+<html><head><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"><meta name="Robots" content="NOINDEX " /></head><body></body>
+                <script type="text/javascript">
+                 var gearPage = document.getElementById('GearPage');
+                 if(null != gearPage)
+                 {
+                     gearPage.parentNode.removeChild(gearPage);
+                     document.title = "Error";
+                 }
+                 </script>
+                 </html><html><head><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"><meta name="Robots" content="NOINDEX " /></head><body></body>
+                <script type="text/javascript">
+                 var gearPage = document.getElementById('GearPage');
+                 if(null != gearPage)
+                 {
+                     gearPage.parentNode.removeChild(gearPage);
+                     document.title = "Error";
+                 }
+                 </script>
+                 </html>

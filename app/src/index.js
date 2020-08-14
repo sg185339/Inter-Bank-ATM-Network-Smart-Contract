@@ -6,7 +6,7 @@ const App = {
   account: null,
   meta: null,
 
-  start: async function() {
+  start: async function () {
     const { web3 } = this;
 
     try {
@@ -28,98 +28,159 @@ const App = {
     }
   },
 
-  setStatus: function(message) {
+  setStatus: function (message) {
     const status = document.getElementById("status");
     status.innerHTML = message;
   },
 
-  createStar: async function() {
+  createStar: async function () {
     const { addBank } = this.meta.methods;
-    await addBank().send({
+    let bank = await addBank().send({
       from: this.account,
       value: 10000000000000000000,
     });
+    const status = document.getElementById("bank");
+    if (bank == 0) { status.innerHTML = "Bank is not registered yet. Please try again." }
+    else { status.innerHTML = "Bank has been registered now." }
   },
 
-  terminateNoticeBank: async function() {
+  fundBank: async function () {
+    const { fundBank } = this.meta.methods;
+    const fundamount = document.getElementById("fundamount").value;
+    console.log(fundamount);
+    await fundBank().send({
+      from: this.account,
+      value: fundamount,
+    });
+    const status = document.getElementById("balance");
+    status.innerHTML = 'The Bank has been funded now with ' + fundamount + ' wei';
+  },
+
+  terminateNoticeBank: async function () {
     const { terminateNoticeBank } = this.meta.methods;
     await terminateNoticeBank().send({
       from: this.account,
     });
   },
 
-  withdrawBank: async function() {
+  withdrawBank: async function () {
     const { withdrawBank } = this.meta.methods;
     await withdrawBank().send({
       from: this.account,
     });
   },
-  getBalance: async function() {
+  getBalance: async function () {
     const { getBalance } = this.meta.methods;
     const status = document.getElementById("balance");
-    console.log( await getBalance(this.account).send({
+    status.innerHTML = await getBalance().call({
       from: this.account,
-    }));
+    });
   },
-  
+
 
   // Implement Task 4 Modify the front end of the DAPP
-  requestTransfer: async function (){
+  requestTransfer: async function () {
     const { requestTransfer } = this.meta.methods;
     const Correlation = document.getElementById("Correlation").value;
     const Customer = document.getElementById("Customer").value;
     const Address = document.getElementById("Address").value;
     const Amount = document.getElementById("Amount").value;
-    const Transaction = document.getElementById("Transaction").value;
-    await requestTransfer(Correlation,Customer,Address,Amount,Transaction).call();
+    const Transaction = document.getElementById("RTransaction").value;
+    console.log(Transaction)
+    let tid = await requestTransfer(Correlation, Customer, Address, Amount, Transaction).send({
+      from: this.account,
+    });
+    const transferidelement = document.getElementById("transferid");
+    this.meta.events.TransferRequested({ fromBlock: 0 }, function (error, event) { console.log(error) })
+      .on('data', (log) => {
+        let { returnValues: { from, to, correlationId, transferId }, blockNumber } = log
+        console.log(`transferId = ${transferId}`)
+        transferidelement.innerHTML = `The transaction has been initiated with transfer id :- ${transferId}`;
+      })
+      .on('changed', (log) => {
+        console.log(`Changed: ${log}`)
+      })
+      .on('error', (log) => {
+        console.log(`error:  ${log}`)
+      })
+    
+    
   },
 
-  confirmTransfer: async function (){
+  confirmTransfer: async function () {
     const { confirmTransfer } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
-    await confirmTransfer(Transaction).call();
+    await confirmTransfer(Transaction).send({
+      from: this.account,
+    });
+    const status2 = document.getElementById("status2");
+    this.meta.events.TransferConfirmed({ fromBlock: 0 }, function (error, event){})
+      .on('data', (log) => {
+        let { returnValues: { from, transferId }, blockNumber } = log
+        console.log(`transferId = ${transferId}`)
+        status2.innerHTML = `Transaction ${transferId} is confirmed now `;
+      })
+      .on('changed', (log) => {
+        console.log(`Changed: ${log}`)
+      })
+      .on('error', (log) => {
+        console.log(`error:  ${log}`)
+      })
   },
 
-  getFrom: async function (){
+  getFrom: async function () {
     const { getFrom } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
     const status = document.getElementById("view");
-    status.innerHTML = await getFrom(Transaction).call();
+    status.innerHTML = await getFrom(Transaction).call({
+      from: this.account,
+    });
   },
 
-  getTo: async function (){
+  getTo: async function () {
     const { getTo } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
     const status = document.getElementById("view");
-    status.innerHTML = await getTo(Transaction).call();
+    status.innerHTML = await getTo(Transaction).call({
+      from: this.account,
+    });
   },
 
-  getFromAccount: async function (){
+  getFromAccount: async function () {
     const { getFromAccount } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
     const status = document.getElementById("view");
-    status.innerHTML = await getFromAccount(Transaction).call();
+    status.innerHTML = await getFromAccount(Transaction).call({
+      from: this.account,
+    });
   },
 
-  getAmount: async function (){
+  getAmount: async function () {
     const { getAmount } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
     const status = document.getElementById("view");
-    status.innerHTML = await getAmount(Transaction).call();
+    status.innerHTML = await getAmount(Transaction).call({
+      from: this.account,
+    }) + " wei";
   },
 
-  getState: async function (){
+  getState: async function () {
     const { getState } = this.meta.methods;
     const Transaction = document.getElementById("Transaction").value;
     const status = document.getElementById("view");
-    status.innerHTML = await getState(Transaction).call();
+    let state = await getState(Transaction).call({
+      from: this.account,
+    });
+    if (state == 0) { status.innerHTML = 'None'; }
+    else if (state = 1) { status.innerHTML = 'Initiated'; }
+    else { status.innerHTML = 'Confirmed'; }
   }
 
 };
 
 window.App = App;
 
-window.addEventListener("load", async function() {
+window.addEventListener("load", async function () {
   if (window.ethereum) {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);

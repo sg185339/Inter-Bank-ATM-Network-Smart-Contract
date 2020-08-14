@@ -95,12 +95,12 @@ contract InterBankNetwork {
     /*                                     SMART CONTRACT FUNCTIONS                             */
     /********************************************************************************************/
 
-    function addBank() public payable requireIsOperational {
+    function addBank() public payable requireIsOperational returns (bool){
     require(msg.value >= MIN_FUNDING_AMOUNT,"Bank cannot be added in this network until funding of 10 ETH");
     registeredBanks[msg.sender] = true;
     uint256 fundedamount = msg.value;
     bankfundBalance[msg.sender] = fundedamount;
-    contractOwner.transfer(fundedamount);
+    return true;
     }
     
     function fundBank() public payable requireIsOperational requireIsBankRegistered{
@@ -115,8 +115,8 @@ contract InterBankNetwork {
         terminationDayforBankbyOwner[bank]= terminationdate;
     }
     
-    function getBalance(address bank) public view requireIsOperational requireIsBankRegistered returns(uint256){
-        return bankBalance[bank];
+    function getBalance() public view requireIsOperational requireIsBankRegistered returns(uint256){
+        return bankBalance[msg.sender];
     }
     
     function withdrawBank() public requireIsBankRegistered requireIsOperational{
@@ -160,7 +160,7 @@ contract InterBankNetwork {
     // msg.sender (to FI) confirms a transfer
     function confirmTransfer(bytes32 transferId) public returns (bool) {
         Transfer memory transfer = transfers[transferId];
-        if (msg.sender != transfer.to || transfer.state != State.Initiated || transfer.state != State.Confirmed) return false;
+        if (msg.sender != transfer.to || transfer.state != State.Initiated) return false;
         transfer.state = State.Confirmed;
         
         bankBalance[msg.sender] = bankBalance[msg.sender].sub(transfer.amount);       
